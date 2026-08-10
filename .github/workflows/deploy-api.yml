@@ -1,0 +1,37 @@
+name: Deploy API Production
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: production-api-deploy
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  deploy:
+    name: Build and deploy API to Cloud Run
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ vars.GCP_WIF_PROVIDER }}
+          service_account: ${{ vars.GCP_SERVICE_ACCOUNT }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Submit Cloud Build
+        run: |
+          gcloud builds submit api \
+            --project="${{ vars.GCP_PROJECT_ID }}" \
+            --region="${{ vars.GCP_REGION }}" \
+            --config=api/cloudbuild.yaml \
+            --substitutions="_REGION=${{ vars.GCP_REGION }},_REPOSITORY=${{ vars.ARTIFACT_REPOSITORY }},_SERVICE_NAME=${{ vars.CLOUD_RUN_SERVICE }},_DATABASE_SECRET=${{ vars.DATABASE_SECRET_NAME }},_ALLOWED_ORIGINS=${{ vars.ALLOWED_ORIGINS }}"
