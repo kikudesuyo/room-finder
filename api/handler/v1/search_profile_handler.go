@@ -23,6 +23,26 @@ func HandleCreateSearchProfile(r *http.Request, _ map[string]interface{}) (http.
 	return entity.NewCreatedResponse(profile), nil
 }
 
+func HandleListSearchProfiles(r *http.Request, _ map[string]interface{}) (http.Handler, error) {
+	profiles, err := service.ListSearchProfiles(r.Context())
+	if err != nil {
+		return nil, err
+	}
+	return entity.NewObjectResponse(profiles), nil
+}
+
+func HandleListRentalOffers(r *http.Request, _ map[string]interface{}) (http.Handler, error) {
+	profileID, err := parseID(r)
+	if err != nil {
+		return nil, xerror.ClientValidationErr(err)
+	}
+	offers, err := service.ListRentalOffers(r.Context(), profileID)
+	if err != nil {
+		return nil, err
+	}
+	return entity.NewObjectResponse(offers), nil
+}
+
 func HandleUpdateSearchProfile(r *http.Request, _ map[string]interface{}) (http.Handler, error) {
 	profileID, err := parseID(r)
 	if err != nil {
