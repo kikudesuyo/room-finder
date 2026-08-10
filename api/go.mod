@@ -4,6 +4,7 @@ go 1.25.0
 
 require (
 	github.com/go-chi/chi/v5 v5.3.1
+	github.com/morikuni/failure v1.1.2
 	gorm.io/datatypes v1.2.7
 	gorm.io/driver/postgres v1.6.2
 	gorm.io/gorm v1.31.2
