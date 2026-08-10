@@ -36,6 +36,13 @@ func CreateSearchProfile(ctx context.Context, req entity.CreateSearchProfileRequ
 	}, nil
 }
 
+func UpdateSearchProfile(_ context.Context, profileID int64, _ entity.UpdateSearchProfileRequest) error {
+	if profileID <= 0 {
+		return xerror.ClientValidationErr(errors.New("profile id must be positive"))
+	}
+	return xerror.ClientValidationErr(errors.New("search profiles are immutable; create a new profile instead"))
+}
+
 func validateJSONMap(value []byte) error {
 	if len(value) == 0 || !json.Valid(value) {
 		return errors.New("required_conditions must be valid JSON")
