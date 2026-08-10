@@ -1,0 +1,23 @@
+name: room-finder
+
+services:
+  postgres:
+    image: postgres:18.4
+    container_name: room-finder-postgres
+    restart: unless-stopped
+    environment:
+      TZ: ${TZ:-UTC}
+      POSTGRES_DB: ${POSTGRES_DB:-room_finder}
+      POSTGRES_USER: ${POSTGRES_USER:-room_finder}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD must be set in .env}
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --locale=C"
+    ports:
+      - "${POSTGRES_PORT:-11163}:5432"
+    volumes:
+      - ./.local/postgres18:/var/lib/postgresql
+    command: ["postgres", "-c", "timezone=${TZ:-UTC}", "-c", "client_encoding=UTF8"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-room_finder} -d ${POSTGRES_DB:-room_finder}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
