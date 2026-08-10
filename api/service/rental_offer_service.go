@@ -61,3 +61,18 @@ func SaveRentalOffer(ctx context.Context, profileID int64, req entity.SaveRental
 		RealEstateCompany: offer.RealEstateCompany, Details: offer.Details, CapturedAt: offer.CapturedAt,
 	}, nil
 }
+
+func ListRentalOffers(ctx context.Context, profileID int64) ([]entity.RentalOfferResponse, error) {
+	if profileID <= 0 {
+		return nil, xerror.ClientValidationErr(errors.New("profile id must be positive"))
+	}
+	offers, err := repository.ListRentalOffers(ctx, library.GetDB(ctx), profileID)
+	if err != nil {
+		return nil, xerror.UnknownDBErr(err)
+	}
+	result := make([]entity.RentalOfferResponse, 0, len(offers))
+	for _, offer := range offers {
+		result = append(result, entity.RentalOfferResponse(offer))
+	}
+	return result, nil
+}

@@ -23,3 +23,9 @@ func UpsertRentalOffer(ctx context.Context, db *gorm.DB, offer *entity.DBTableRe
 		}),
 	}).Create(offer).Error
 }
+
+func ListRentalOffers(ctx context.Context, db *gorm.DB, profileID int64) ([]entity.DBTableRentalOffer, error) {
+	var offers []entity.DBTableRentalOffer
+	err := db.WithContext(ctx).Where("search_profile_id = ?", profileID).Order("captured_at DESC, id DESC").Find(&offers).Error
+	return offers, err
+}

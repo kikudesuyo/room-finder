@@ -36,6 +36,18 @@ func CreateSearchProfile(ctx context.Context, req entity.CreateSearchProfileRequ
 	}, nil
 }
 
+func ListSearchProfiles(ctx context.Context) ([]entity.SearchProfileResponse, error) {
+	profiles, err := repository.ListSearchProfiles(ctx, library.GetDB(ctx))
+	if err != nil {
+		return nil, xerror.UnknownDBErr(err)
+	}
+	result := make([]entity.SearchProfileResponse, 0, len(profiles))
+	for _, profile := range profiles {
+		result = append(result, entity.SearchProfileResponse(profile))
+	}
+	return result, nil
+}
+
 func UpdateSearchProfile(_ context.Context, profileID int64, _ entity.UpdateSearchProfileRequest) error {
 	if profileID <= 0 {
 		return xerror.ClientValidationErr(errors.New("profile id must be positive"))

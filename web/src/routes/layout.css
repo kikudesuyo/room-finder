@@ -13,3 +13,98 @@ body {
 	margin: 0;
 	font-family: var(--font-body-md);
 }
+
+button,
+a {
+	transition:
+		opacity 160ms ease,
+		background-color 160ms ease,
+		border-color 160ms ease;
+}
+
+button:disabled {
+	opacity: 0.55;
+	cursor: wait;
+}
+
+.button-secondary {
+	border: 1px solid color-mix(in srgb, var(--color-primary) 24%, transparent);
+	border-radius: 999px;
+	padding: 0.6rem 1rem;
+	font-size: 0.85rem;
+}
+
+.button-secondary:hover {
+	background: color-mix(in srgb, var(--color-primary) 8%, transparent);
+}
+
+.profile-card,
+.offer-card,
+.empty-card {
+	border: 1px solid color-mix(in srgb, var(--color-on-surface) 12%, transparent);
+	border-radius: 1rem;
+	background: color-mix(in srgb, white 48%, transparent);
+}
+
+.profile-card {
+	display: flex;
+	width: 100%;
+	flex-direction: column;
+	padding: 0.9rem 1rem;
+}
+
+.profile-card:hover,
+.profile-card.selected {
+	border-color: color-mix(in srgb, var(--color-primary) 55%, transparent);
+	background: color-mix(in srgb, var(--color-primary) 8%, transparent);
+}
+
+.offer-card {
+	padding: 1.25rem;
+}
+
+.empty-card {
+	color: var(--color-on-surface-variant);
+	padding: 1.5rem;
+	font-size: 0.9rem;
+}
+
+.notice-error {
+	border: 1px solid #b94c4c66;
+	border-radius: 0.8rem;
+	background: #fff0ee;
+	padding: 1rem;
+	color: #8a2828;
+}
+
+.tag {
+	border-radius: 999px;
+	background: #e8eee9;
+	padding: 0.25rem 0.55rem;
+	font-size: 0.7rem;
+	white-space: nowrap;
+}
+
+.offer-facts {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 0.8rem;
+	margin: 1.5rem 0;
+}
+
+.offer-facts dt {
+	color: var(--color-on-surface-variant);
+	font-size: 0.72rem;
+}
+
+.offer-facts dd {
+	margin-top: 0.2rem;
+	font-size: 0.95rem;
+}
+
+.source-link {
+	color: var(--color-primary);
+	font-size: 0.85rem;
+	text-decoration: underline;
+	text-underline-offset: 0.2rem;
+}
