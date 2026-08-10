@@ -6,11 +6,11 @@ import (
 	"gorm.io/datatypes"
 )
 
-type DBTableProperty struct {
+type DBTableRentalOffer struct {
 	ID                int64          `gorm:"column:id;primaryKey"`
 	SearchProfileID   int64          `gorm:"column:search_profile_id"`
 	Source            string         `gorm:"column:source"`
-	SourcePropertyID  string         `gorm:"column:source_property_id"`
+	SourceOfferID     string         `gorm:"column:source_offer_id"`
 	SourceURL         string         `gorm:"column:source_url"`
 	Name              *string        `gorm:"column:name"`
 	Address           *string        `gorm:"column:address"`
@@ -30,6 +30,6 @@ type DBTableProperty struct {
 	CapturedAt        time.Time      `gorm:"column:captured_at"`
 }
 
-func (DBTableProperty) TableName() string {
-	return "properties"
+func (DBTableRentalOffer) TableName() string {
+	return "rental_offers"
 }

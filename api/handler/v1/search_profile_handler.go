@@ -22,20 +22,20 @@ func HandleCreateSearchProfile(r *http.Request, _ map[string]interface{}) (http.
 	return entity.NewCreatedResponse(profile), nil
 }
 
-func HandleSaveProperty(r *http.Request, _ map[string]interface{}) (http.Handler, error) {
+func HandleSaveRentalOffer(r *http.Request, _ map[string]interface{}) (http.Handler, error) {
 	profileID, err := parseID(r)
 	if err != nil {
 		return nil, xerror.ClientValidationErr(err)
 	}
-	var req entity.SavePropertyRequest
+	var req entity.SaveRentalOfferRequest
 	if err := decodeJSON(r, &req); err != nil {
 		return nil, xerror.ClientValidationErr(err)
 	}
-	property, err := service.SaveProperty(r.Context(), profileID, req)
+	offer, err := service.SaveRentalOffer(r.Context(), profileID, req)
 	if err != nil {
 		return nil, err
 	}
-	return entity.NewCreatedResponse(property), nil
+	return entity.NewCreatedResponse(offer), nil
 }
 
 func decodeJSON(r *http.Request, target any) error {

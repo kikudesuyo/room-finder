@@ -13,12 +13,12 @@ import (
 	"gorm.io/gorm"
 )
 
-func SaveProperty(ctx context.Context, profileID int64, req entity.SavePropertyRequest) (*entity.PropertyResponse, error) {
+func SaveRentalOffer(ctx context.Context, profileID int64, req entity.SaveRentalOfferRequest) (*entity.RentalOfferResponse, error) {
 	if profileID <= 0 {
 		return nil, xerror.ClientValidationErr(errors.New("profile id must be positive"))
 	}
-	if strings.TrimSpace(req.Source) == "" || strings.TrimSpace(req.SourcePropertyID) == "" {
-		return nil, xerror.ClientValidationErr(errors.New("source and source_property_id are required"))
+	if strings.TrimSpace(req.Source) == "" || strings.TrimSpace(req.SourceOfferID) == "" {
+		return nil, xerror.ClientValidationErr(errors.New("source and source_offer_id are required"))
 	}
 	parsedURL, err := url.Parse(req.SourceURL)
 	if err != nil || (parsedURL.Scheme != "http" && parsedURL.Scheme != "https") || parsedURL.Host == "" {
@@ -39,25 +39,25 @@ func SaveProperty(ctx context.Context, profileID int64, req entity.SavePropertyR
 		return nil, xerror.UnknownDBErr(err)
 	}
 
-	property := &entity.DBTableProperty{
-		SearchProfileID: profileID, Source: req.Source, SourcePropertyID: req.SourcePropertyID,
+	offer := &entity.DBTableRentalOffer{
+		SearchProfileID: profileID, Source: req.Source, SourceOfferID: req.SourceOfferID,
 		SourceURL: req.SourceURL, Name: req.Name, Address: req.Address, RentYen: req.RentYen,
 		ManagementFeeYen: req.ManagementFeeYen, DepositYen: req.DepositYen, KeyMoneyYen: req.KeyMoneyYen,
 		RoomLayout: req.RoomLayout, AreaSquareMeters: req.AreaSquareMeters, BuiltYear: req.BuiltYear,
 		Floor: req.Floor, Direction: req.Direction, Access: req.Access, Amenities: req.Amenities,
 		RealEstateCompany: req.RealEstateCompany, Details: req.Details, CapturedAt: req.CapturedAt,
 	}
-	if err := repository.UpsertProperty(ctx, db, property); err != nil {
+	if err := repository.UpsertRentalOffer(ctx, db, offer); err != nil {
 		return nil, xerror.UnknownDBErr(err)
 	}
 
-	return &entity.PropertyResponse{
-		ID: property.ID, SearchProfileID: property.SearchProfileID, Source: property.Source,
-		SourcePropertyID: property.SourcePropertyID, SourceURL: property.SourceURL, Name: property.Name,
-		Address: property.Address, RentYen: property.RentYen, ManagementFeeYen: property.ManagementFeeYen,
-		DepositYen: property.DepositYen, KeyMoneyYen: property.KeyMoneyYen, RoomLayout: property.RoomLayout,
-		AreaSquareMeters: property.AreaSquareMeters, BuiltYear: property.BuiltYear, Floor: property.Floor,
-		Direction: property.Direction, Access: property.Access, Amenities: property.Amenities,
-		RealEstateCompany: property.RealEstateCompany, Details: property.Details, CapturedAt: property.CapturedAt,
+	return &entity.RentalOfferResponse{
+		ID: offer.ID, SearchProfileID: offer.SearchProfileID, Source: offer.Source,
+		SourceOfferID: offer.SourceOfferID, SourceURL: offer.SourceURL, Name: offer.Name,
+		Address: offer.Address, RentYen: offer.RentYen, ManagementFeeYen: offer.ManagementFeeYen,
+		DepositYen: offer.DepositYen, KeyMoneyYen: offer.KeyMoneyYen, RoomLayout: offer.RoomLayout,
+		AreaSquareMeters: offer.AreaSquareMeters, BuiltYear: offer.BuiltYear, Floor: offer.Floor,
+		Direction: offer.Direction, Access: offer.Access, Amenities: offer.Amenities,
+		RealEstateCompany: offer.RealEstateCompany, Details: offer.Details, CapturedAt: offer.CapturedAt,
 	}, nil
 }

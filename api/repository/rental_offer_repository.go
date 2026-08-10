@@ -8,12 +8,12 @@ import (
 	"gorm.io/gorm/clause"
 )
 
-func UpsertProperty(ctx context.Context, db *gorm.DB, property *entity.DBTableProperty) error {
+func UpsertRentalOffer(ctx context.Context, db *gorm.DB, offer *entity.DBTableRentalOffer) error {
 	return db.WithContext(ctx).Clauses(clause.OnConflict{
 		Columns: []clause.Column{
 			{Name: "search_profile_id"},
 			{Name: "source"},
-			{Name: "source_property_id"},
+			{Name: "source_offer_id"},
 		},
 		DoUpdates: clause.AssignmentColumns([]string{
 			"source_url", "name", "address", "rent_yen", "management_fee_yen",
@@ -21,5 +21,5 @@ func UpsertProperty(ctx context.Context, db *gorm.DB, property *entity.DBTablePr
 			"built_year", "floor", "direction", "access", "amenities",
 			"real_estate_company", "details", "captured_at",
 		}),
-	}).Create(property).Error
+	}).Create(offer).Error
 }

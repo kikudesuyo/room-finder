@@ -19,7 +19,7 @@ func NewRouter() http.Handler {
 	r.Route("/api/v1", func(r chi.Router) {
 		r.Get("/health", v1.HandleHealth)
 		r.Post("/search-profiles", handleFunc(v1.HandleCreateSearchProfile))
-		r.Post("/search-profiles/{id}/properties", handleFunc(v1.HandleSaveProperty))
+		r.Post("/search-profiles/{id}/rental-offers", handleFunc(v1.HandleSaveRentalOffer))
 	})
 
 	return r

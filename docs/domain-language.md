@@ -5,29 +5,22 @@
 
 ## 正規語
 
-### Listing
+### RentalOffer
 
-賃貸サイトに掲載されている、1件の募集情報を指す。
+賃貸サイトで募集されている、1件の賃貸情報を指す。
 
-Room Finderが現在保存する対象は建物そのものではなく、LIFULL HOME'Sなどのサイトに掲載された募集情報であるため、正規語は`Listing`とする。
+Room Finderが現在保存する対象は建物そのものではなく、LIFULL HOME'Sなどで提供されている賃貸募集情報であるため、正規語は`RentalOffer`とする。
 
 使用例:
 
-- `Listing`
-- `DBTableListing`
-- `listings`
-- `source_listing_id`
-- `SaveListingRequest`
-- `/rental-listings`
+- `RentalOffer`
+- `DBTableRentalOffer`
+- `rental_offers`
+- `source_offer_id`
+- `SaveRentalOfferRequest`
+- `/rental-offers`
 
-同じサイト上の同じ掲載IDを再送した場合は、同一Listingの現在情報を更新する。
-
-### Rental Listing
-
-文脈だけでは賃貸掲載情報であることが分かりにくい場合に使用する正式名称。
-特にドキュメント、API仕様、Agentプロンプトでは`Rental Listing`を使用してよい。
-
-コード上の型名・テーブル名では、Room Finder内の文脈が明確なため`Listing`を優先する。
+同じサイト上の同じ募集IDを再送した場合は、同一RentalOfferの現在情報を更新する。
 
 ## 使い分ける用語
 
@@ -42,10 +35,9 @@ Room Finderが現在保存する対象は建物そのものではなく、LIFULL
 マンション・アパートなどの建物を指す。
 現MVPでは、建物情報と募集情報を分離しない。
 
-### Search Profile
+### SearchCondition
 
-初回プロンプトと、そのプロンプトから解釈された絶対条件をまとめた検索設定を指す。
-作成後は変更せず、条件を変える場合は新しいSearch Profileを作成する。
+ユーザーが指定する1件分の検索条件を指す。作成後は変更せず、条件を変える場合は新しいSearchConditionを作成する。
 
 ## 使用しない語
 
@@ -53,7 +45,7 @@ Room Finderが現在保存する対象は建物そのものではなく、LIFULL
 
 一般的な英語としては不動産を意味できるが、プログラミングではオブジェクトの属性も意味するため、Room Finderのドメイン用語としては使用しない。
 
-既存のIssue #2実装には移行前の名前として、`properties`テーブルと`DBTableProperty`が残っている。今後のAPI・Agent・新規コードでは`Listing`を使用し、既存DB名を変更する場合は専用マイグレーションで段階的に移行する。
+既存のIssue #2実装には移行前の名前として`properties`テーブルが存在する。専用マイグレーションで`rental_offers`へ移行する。
 
 ### Room
 
@@ -63,10 +55,10 @@ Room Finderが現在保存する対象は建物そのものではなく、LIFULL
 
 | 概念 | 正規語 | 例 |
 | --- | --- | --- |
-| 掲載情報 | Listing | `Listing`, `listings` |
-| 取得元の掲載ID | Source Listing ID | `source_listing_id` |
+| 賃貸募集情報 | RentalOffer | `RentalOffer`, `rental_offers` |
+| 取得元の募集ID | Source Offer ID | `source_offer_id` |
 | 実際の住戸 | Unit | `unit_id`（将来必要になった場合のみ） |
 | 建物 | Building | `building_id`（将来必要になった場合のみ） |
-| 検索設定 | Search Profile | `search_profile_id` |
+| 検索条件 | SearchCondition | `search_condition_id` |
 
 新しい用語が必要になった場合は、既存語の流用で済ませず、このドキュメントへ定義を追加してから実装する。

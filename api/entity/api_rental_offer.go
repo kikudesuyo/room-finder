@@ -6,9 +6,9 @@ import (
 	"gorm.io/datatypes"
 )
 
-type SavePropertyRequest struct {
+type SaveRentalOfferRequest struct {
 	Source            string         `json:"source"`
-	SourcePropertyID  string         `json:"source_property_id"`
+	SourceOfferID     string         `json:"source_offer_id"`
 	SourceURL         string         `json:"source_url"`
 	Name              *string        `json:"name"`
 	Address           *string        `json:"address"`
@@ -28,11 +28,11 @@ type SavePropertyRequest struct {
 	CapturedAt        time.Time      `json:"captured_at"`
 }
 
-type PropertyResponse struct {
+type RentalOfferResponse struct {
 	ID                int64          `json:"id"`
 	SearchProfileID   int64          `json:"search_profile_id"`
 	Source            string         `json:"source"`
-	SourcePropertyID  string         `json:"source_property_id"`
+	SourceOfferID     string         `json:"source_offer_id"`
 	SourceURL         string         `json:"source_url"`
 	Name              *string        `json:"name"`
 	Address           *string        `json:"address"`
