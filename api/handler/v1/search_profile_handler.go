@@ -2,6 +2,7 @@ package v1
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -20,6 +21,21 @@ func HandleCreateSearchProfile(r *http.Request, _ map[string]interface{}) (http.
 		return nil, err
 	}
 	return entity.NewCreatedResponse(profile), nil
+}
+
+func HandleUpdateSearchProfile(r *http.Request, _ map[string]interface{}) (http.Handler, error) {
+	profileID, err := parseID(r)
+	if err != nil {
+		return nil, xerror.ClientValidationErr(err)
+	}
+	var req entity.UpdateSearchProfileRequest
+	if err := decodeJSON(r, &req); err != nil {
+		return nil, xerror.ClientValidationErr(err)
+	}
+	if err := service.UpdateSearchProfile(r.Context(), profileID, req); err != nil {
+		return nil, err
+	}
+	return nil, errors.New("search profile update unexpectedly succeeded")
 }
 
 func HandleSaveRentalOffer(r *http.Request, _ map[string]interface{}) (http.Handler, error) {
