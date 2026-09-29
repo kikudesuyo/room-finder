@@ -90,4 +90,4 @@ jobs:
         uses: ariga/setup-atlas@v0
 
       - name: Validate migrations
-        run: atlas migrate lint --dir "file://migrations" --dev-url "docker://postgres/18/dev?search_path=public"
+        run: atlas migrate validate --dir "file://migrations" --dev-url "docker://postgres/18/dev?search_path=public"

@@ -1,22 +1,35 @@
 <script>
 	import { onMount } from 'svelte';
 
+	/** @typedef {{ id: number; initial_prompt: string }} SearchProfile */
+	/** @typedef {{ id: number; source: string; source_url: string; name: string | null; address: string | null; rent_yen: number | null; management_fee_yen: number | null; room_layout: string | null; area_square_meters: number | null; captured_at: string }} RentalOffer */
+
 	const apiBaseURL = import.meta.env.PUBLIC_API_BASE_URL || 'http://localhost:8081';
+	/** @type {SearchProfile[]} */
 	let profiles = $state([]);
+	/** @type {RentalOffer[]} */
 	let offers = $state([]);
+	/** @type {number | null} */
 	let selectedProfileID = $state(null);
 	let loading = $state(true);
 	let errorMessage = $state('');
 
+	/**
+	 * @template T
+	 * @param {string} path
+	 * @returns {Promise<T>}
+	 */
 	async function fetchJSON(path) {
 		const response = await globalThis.fetch(`${apiBaseURL}${path}`);
 		if (!response.ok) {
 			throw new Error(`API request failed: ${response.status}`);
 		}
+		/** @type {{ data: T }} */
 		const body = await response.json();
 		return body.data;
 	}
 
+	/** @param {number} profileID */
 	async function loadOffers(profileID) {
 		selectedProfileID = profileID;
 		offers = await fetchJSON(`/api/v1/search-profiles/${profileID}/rental-offers`);
@@ -40,6 +53,7 @@
 		}
 	}
 
+	/** @param {number | null} value */
 	function yen(value) {
 		return value === null ? '—' : `${value.toLocaleString('ja-JP')}円`;
 	}
