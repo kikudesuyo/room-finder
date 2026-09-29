@@ -19,24 +19,10 @@ description: "Room Finderで複数の掲載元から賃貸物件を検索・詳�
 
 掲載元ごとの差分と adapter の契約は [source-adapter-contract.md](references/source-adapter-contract.md) を読む。既存のLIFULL HOME'S対応は `api/crawler/lifullhomes` とそのテストを参照し、新しい掲載元を追加する場合も共通の保存・判定責務へ直接サイト固有処理を混ぜない。
 
-## バッチ実行
-
-候補URLの一覧を1行1URLで用意し、10〜20件のバッチに分けて、最後に成功したURLをcheckpointへ保存する。既存のrunnerが保存する状態と混同しないよう、用途ごとにstateファイルを分ける。
-
-```bash
-.agents/skills/room-finder-rental-search/scripts/batch-fetch.sh \
-  --source lifullhomes \
-  --input candidates.txt \
-  --state .local/rental-search/lifullhomes/state \
-  --batch-size 20 \
-  -- 'go run ./cmd/rental-fetch --source lifullhomes --url {item}'
-```
-
-コマンドの終了コードは `0=成功`、`10=一時失敗（再試行対象）`、`20=不一致・確認不能（記録して次へ）` とする。その他の終了コードは実行エラーとしてその場で停止し、checkpointより後を未処理のままにする。出力やログに秘密情報を含めない。
+候補のbatch、checkpoint、再試行、停止・再開は [Room Finder crawl operations skill](../room-finder-crawl-operations/SKILL.md) を読む。
 
 ## 境界
 
 - robots.txt、掲載元の対象ホスト制限、リクエスト間隔、取得元URL・取得日時・根拠保存を守る。
 - 詳細ページで根拠が取れない条件を推測で合格扱いにしない。
 - shell scriptは候補の意味判定やDB保存を代替しない。判定と保存は既存のGo crawler/agent/APIの責務に従う。
-- 外部サイトへの長時間処理は、10〜20件のバッチ、完了済み件数、再開位置を記録し、60秒以内の処理単位で進捗を確認する。
