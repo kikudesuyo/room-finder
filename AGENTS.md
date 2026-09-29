@@ -10,7 +10,7 @@
 2. `../buildlog/README.md`
 3. `https://github.com/kikudesuyo/dev-platform` の `README.md` と `dev-guideline/README.md`
 4. このリポジトリの `README.md`、`SPEC.md`、関連ドキュメント、既存コード
-5. 物件検索・Web fetch・スクレイピングを行う場合は [Room Finder物件検索skill](.agents/skills/room-finder-rental-search/SKILL.md)
+5. 物件検索・Web fetch・スクレイピングを行う場合は [Room Finder物件検索skill](.agents/skills/room-finder-rental-search/SKILL.md) と [crawl operations skill](.agents/skills/room-finder-crawl-operations/SKILL.md)
 
 参照先を読めない場合は、共有ルールや仕様を推測して実装しない。必要な判断をユーザーへ確認する。
 
@@ -20,6 +20,6 @@ Issue、branch、Acceptance / Quality / Delivery Gate、GitHub運用、一般的
 
 - AgentやブラウザからPostgreSQLへ直接接続しない。物件情報・検索プロファイルの読み書きはGo APIへ集約する。
 - Web/API/DBの構成、責務分離、エラーハンドリング、API形式、テスト方針は `README.md`、`SPEC.md`、既存の `api/` / `web/` 実装を正とする。
-- 物件検索のフィルタ適用、詳細ページの根拠確認、候補・一致・保存件数の分離、バッチ再開、Go API保存、Web UI再表示は、上記のrepository-local skillに従う。
+- 物件検索のフィルタ適用、詳細ページの根拠確認、候補・一致・保存件数の分離、Go API保存、Web UI再表示は物件検索skillに、batch・checkpoint・再試行・再開はcrawl operations skillに従う。
 - skillが定める確認を実行できない場合、保存済み・UI反映済み・条件一致済みとは報告せず、未検証範囲と理由を明記する。
 - ユーザーが「検索だけ」「DBへ保存しない」と明示した場合は、保存手順よりその指定を優先する。
