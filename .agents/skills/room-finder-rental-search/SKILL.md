@@ -5,7 +5,7 @@ description: "Room FinderでLIFULL HOME'Sの物件を検索・詳細確認・保
 
 # Room Finder 物件検索
 
-このスキルは、Room Finderで賃貸物件を取得・判定・保存するときだけ使用する。`dev-platform`へは追加しない。このリポジトリの `AGENTS.md`、`SPEC.md`、既存の `api/crawler/lifullhomes`、`api/runner`、`api/agent` の実装を正とする。
+このスキルは、Room Finderで賃貸物件を取得・判定・保存するときに使用する。このリポジトリの `AGENTS.md`、`SPEC.md`、既存の `api/crawler/lifullhomes`、`api/runner`、`api/agent` の実装を正とする。
 
 ## 必須フロー
 
