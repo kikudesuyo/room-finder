@@ -1,45 +1,54 @@
-<script>
+<script lang="ts">
 	import { onMount } from 'svelte';
 
-	/** @typedef {{ id: number; initial_prompt: string }} SearchProfile */
-	/** @typedef {{ id: number; source: string; source_url: string; name: string | null; address: string | null; rent_yen: number | null; management_fee_yen: number | null; room_layout: string | null; area_square_meters: number | null; captured_at: string }} RentalOffer */
+	type SearchProfile = {
+		id: number;
+		initial_prompt: string;
+	};
+
+	type RentalOffer = {
+		id: number;
+		source: string;
+		source_url: string;
+		name: string | null;
+		address: string | null;
+		rent_yen: number | null;
+		management_fee_yen: number | null;
+		room_layout: string | null;
+		area_square_meters: number | null;
+		captured_at: string;
+	};
+
+	type ApiResponse<T> = {
+		data: T;
+	};
 
 	const apiBaseURL = import.meta.env.PUBLIC_API_BASE_URL || 'http://localhost:8081';
-	/** @type {SearchProfile[]} */
-	let profiles = $state([]);
-	/** @type {RentalOffer[]} */
-	let offers = $state([]);
-	/** @type {number | null} */
-	let selectedProfileID = $state(null);
+	let profiles = $state<SearchProfile[]>([]);
+	let offers = $state<RentalOffer[]>([]);
+	let selectedProfileID = $state<number | null>(null);
 	let loading = $state(true);
 	let errorMessage = $state('');
 
-	/**
-	 * @template T
-	 * @param {string} path
-	 * @returns {Promise<T>}
-	 */
-	async function fetchJSON(path) {
+	async function fetchJSON<T>(path: string): Promise<T> {
 		const response = await globalThis.fetch(`${apiBaseURL}${path}`);
 		if (!response.ok) {
 			throw new Error(`API request failed: ${response.status}`);
 		}
-		/** @type {{ data: T }} */
-		const body = await response.json();
+		const body: ApiResponse<T> = await response.json();
 		return body.data;
 	}
 
-	/** @param {number} profileID */
-	async function loadOffers(profileID) {
+	async function loadOffers(profileID: number): Promise<void> {
 		selectedProfileID = profileID;
-		offers = await fetchJSON(`/api/v1/search-profiles/${profileID}/rental-offers`);
+		offers = await fetchJSON<RentalOffer[]>(`/api/v1/search-profiles/${profileID}/rental-offers`);
 	}
 
-	async function load() {
+	async function load(): Promise<void> {
 		loading = true;
 		errorMessage = '';
 		try {
-			profiles = await fetchJSON('/api/v1/search-profiles');
+			profiles = await fetchJSON<SearchProfile[]>('/api/v1/search-profiles');
 			if (profiles.length > 0) {
 				await loadOffers(profiles[0].id);
 			} else {
@@ -53,8 +62,7 @@
 		}
 	}
 
-	/** @param {number | null} value */
-	function yen(value) {
+	function yen(value: number | null): string {
 		return value === null ? '—' : `${value.toLocaleString('ja-JP')}円`;
 	}
 
