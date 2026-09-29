@@ -8,7 +8,8 @@ trap 'rm -rf "$fixture"' EXIT
 
 printf '%s\n' one two three four > "$fixture/candidates.txt"
 
-"$script_dir/batch-fetch.sh" \
+  "$script_dir/batch-fetch.sh" \
+  --source test-source \
   --input "$fixture/candidates.txt" \
   --state "$fixture/state" \
   --batch-size 2 \
@@ -16,7 +17,8 @@ printf '%s\n' one two three four > "$fixture/candidates.txt"
 
 test "$(wc -l < "$fixture/state" | tr -d ' ')" = 3
 
-"$script_dir/batch-fetch.sh" \
+  "$script_dir/batch-fetch.sh" \
+  --source test-source \
   --input "$fixture/candidates.txt" \
   --state "$fixture/state" \
   --batch-size 2 \
@@ -26,6 +28,7 @@ test "$(wc -l < "$fixture/state" | tr -d ' ')" = 4
 
 set +e
 "$script_dir/batch-fetch.sh" \
+  --source test-source \
   --input "$fixture/candidates.txt" \
   --state "$fixture/error-state" \
   -- 'test "{item}" = one && exit 1'
